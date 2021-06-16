@@ -1,0 +1,3 @@
+[submodule "calib_challenge"]
+	path = calib_challenge
+	url = https://github.com/commaai/calib_challenge
