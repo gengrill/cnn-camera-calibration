@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """
-OpenCV-based camera calibration by extracting pitch and yaw angles from lane lines and unprojecting the vanishing point in image coordinates to camera coordinates.
+OpenCV-based camera calibration by extracting pitch and yaw angles from
+lane lines and unprojecting the vanishing point in image coordinates to
+camera coordinates. Use like:
+
+$ python3 ./opencv_pitchyaw.py 0.hevc > 0.txt
 """
 import cv2
 import sys
-import time
-import torch
 import numpy as np
-import torchvision as tv # some filtering and denoizing (easier in Torchvision than in OpenCV)
 
 FOCAL_LENGTH = 910.0
 FRAME_SIZE   = (1164, 874)
@@ -22,9 +23,6 @@ TRAPEZOID = [np.array([ # cuts out sides and top part of the frame
     (FRAME_SIZE[0], 8*FRAME_SIZE[1]//10),
     (7*FRAME_SIZE[0]//10, 15*FRAME_SIZE[1]//32),
     (3*FRAME_SIZE[0]//10, 15*FRAME_SIZE[1]//32)], dtype='int32')]
-grayscale = tv.transforms.Grayscale()
-normalize_frame = tv.transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
-toPIL = tv.transforms.ToPILImage()
 
 def get_line(rho, theta):
     a  = np.cos(theta)
