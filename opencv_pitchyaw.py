@@ -110,7 +110,7 @@ def calc_pitch_yaw(left_lines, right_lines, pitches, yaws, img=None):
         a1, a2 = get_line(left_rho, left_theta)
         b1, b2 = get_line(right_rho, right_theta)
         vp = get_intersect(a1, a2, b1, b2)
-        _, pitch, yaw = calib_from_vp(vp)
+        _, pitch, yaw = rpy_from_vp(vp)
         pitches += [abs(pitch)]
         yaws    += [abs(yaw)]
     return np.mean(pitches), np.mean(yaws)
@@ -124,7 +124,7 @@ def unproject(img_pts, K_inv=K_inv):
     cam_pts[(img_pts < 0).any(axis=1)] = np.nan
     return cam_pts[:, :2].reshape(input_shape)
 
-def calib_from_vp(vp):
+def rpy_from_vp(vp):
     vp_cam = unproject(vp)
     yaw_calib = np.arctan(vp_cam[0])
     pitch_calib = np.arctan(-vp_cam[1])*np.cos(yaw_calib)
